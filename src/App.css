@@ -1,0 +1,173 @@
+/* App shell — components.top-nav tokens from md/DESIGN-airtable.md */
+
+.app {
+  min-height: 100%;
+  background: var(--color-canvas);
+}
+
+.app-header {
+  height: 64px;
+  background: var(--color-canvas);
+  border-bottom: 1px solid var(--color-hairline);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header-inner {
+  max-width: 1280px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-xxl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxl);
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.app-logo-mark {
+  height: 0.75em;
+  width: auto;
+  display: block;
+}
+
+.app-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  height: 100%;
+}
+
+.app-menu-item {
+  height: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--color-muted);
+  padding: 0 var(--space-xxs);
+}
+
+.app-menu-item--active {
+  color: var(--color-ink);
+  font-weight: 500;
+  border-bottom-color: var(--color-ink);
+}
+
+/* ---- Hamburger toggle (mobile only) ---- */
+.app-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-full);
+  padding: 0;
+}
+
+.app-menu-toggle span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--color-ink);
+}
+
+/* ---- Full-screen mobile menu sheet ---- */
+.app-menu-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--color-canvas);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-menu-sheet-header {
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.app-menu-sheet-close {
+  width: 40px;
+  height: 40px;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-full);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+.app-menu-sheet-nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  gap: var(--space-xs);
+}
+
+.app-menu-sheet-item {
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.app-menu-sheet-item--active {
+  color: var(--color-ink);
+  font-weight: 500;
+  background: var(--color-surface-soft);
+}
+
+.app-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-xxl) var(--space-section) var(--space-xxl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .app-header-inner {
+    padding: 0 var(--space-lg);
+    gap: var(--space-lg);
+  }
+
+  .app-menu {
+    display: none;
+  }
+
+  .app-menu-toggle {
+    display: flex;
+  }
+
+  .app-main {
+    padding: var(--space-lg);
+  }
+}

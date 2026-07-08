@@ -1,0 +1,72 @@
+/* MarqueeBand — infinite-scroll ticker ribbon, signature-card tone tokens from md/DESIGN-airtable.md */
+
+.marquee-band {
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.marquee-band__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee-band-scroll 18s linear infinite;
+}
+
+@keyframes marquee-band-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.3333%);
+  }
+}
+
+.marquee-band__item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.marquee-band__star {
+  margin-left: var(--space-md);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.marquee-band--mustard {
+  background: var(--color-signature-mustard);
+  color: var(--color-ink);
+}
+
+.marquee-band--peach {
+  background: var(--color-signature-peach);
+  color: var(--color-ink);
+}
+
+.marquee-band--mint {
+  background: var(--color-signature-mint);
+  color: var(--color-ink);
+}
+
+.marquee-band--coral {
+  background: var(--color-signature-coral);
+  color: var(--color-on-primary);
+}
+
+.marquee-band--white {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-band__track {
+    animation: none;
+  }
+}

@@ -1,0 +1,106 @@
+/* BannerSlider — components.signature-*-card tokens from md/DESIGN-airtable.md */
+
+.banner-slider {
+  --swiper-theme-color: var(--color-on-primary);
+  --swiper-navigation-size: 20px;
+  --swiper-navigation-sides-offset: var(--space-lg);
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.banner-slider .swiper-button-next,
+.banner-slider .swiper-button-prev {
+  width: 40px;
+  height: 40px;
+  background: rgba(24, 29, 38, 0.35);
+  border-radius: var(--radius-full);
+  color: var(--color-on-primary);
+}
+
+.banner-slider .swiper-button-next::after,
+.banner-slider .swiper-button-prev::after {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.banner-slider .swiper-pagination-bullet {
+  background: var(--color-on-primary);
+  opacity: 0.5;
+}
+
+.banner-slider .swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+.banner-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 280px;
+  border-radius: var(--radius-lg);
+  /* top/bottom: space-xxl · left/right: clears the nav-arrow gutter
+     (--swiper-navigation-sides-offset 24px + 40px button + 8px gap) */
+  padding: var(--space-xxl) 72px;
+  color: var(--color-on-primary);
+  background-repeat: repeat, no-repeat;
+  background-position: 0 0, center;
+  background-size: 22px 22px, cover;
+}
+
+.banner-card-text {
+  padding-left: var(--space-lg);
+  max-width: 560px;
+}
+
+.banner-card-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.banner-card-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  max-width: 480px;
+}
+
+/* Tonal gradient + subtle dot-grid texture — same hue family per token, no new accent colors */
+.banner-card--coral {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in srgb, var(--color-signature-coral) 100%, white 12%) 0%, var(--color-signature-coral) 45%, color-mix(in srgb, var(--color-signature-coral) 100%, black 30%) 100%);
+}
+
+.banner-card--forest {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in srgb, var(--color-signature-forest) 100%, white 18%) 0%, var(--color-signature-forest) 45%, color-mix(in srgb, var(--color-signature-forest) 100%, black 35%) 100%);
+}
+
+.banner-card--dark {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in srgb, var(--color-surface-dark) 100%, white 14%) 0%, var(--color-surface-dark) 45%, var(--color-primary-active) 100%);
+}
+
+@media (max-width: 768px) {
+  .banner-card {
+    min-height: 220px;
+    padding: var(--space-xl) 56px;
+  }
+
+  .banner-card-text {
+    padding-left: var(--space-sm);
+  }
+
+  .banner-card-title {
+    font-size: 24px;
+  }
+}

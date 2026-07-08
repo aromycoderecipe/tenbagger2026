@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow — Production apps at prototype speed</title>
+<style>
+  :root {
+    --primary: #181d26;
+    --primary-active: #0d1218;
+    --ink: #181d26;
+    --body: #333840;
+    --muted: #41454d;
+    --hairline: #dddddd;
+    --border-strong: #9297a0;
+    --canvas: #ffffff;
+    --surface-soft: #f8fafc;
+    --surface-strong: #e0e2e6;
+    --surface-dark: #181d26;
+    --signature-coral: #aa2d00;
+    --signature-forest: #0a2e0e;
+    --signature-cream: #f5e9d4;
+    --signature-peach: #fcab79;
+    --signature-mint: #a8d8c4;
+    --signature-yellow: #f4d35e;
+    --signature-mustard: #d9a441;
+    --on-primary: #ffffff;
+    --on-dark: #ffffff;
+    --link: #1b61c9;
+    --link-active: #1a3866;
+
+    --radius-xs: 2px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 12px;
+    --radius-pill: 9999px;
+    --radius-full: 9999px;
+
+    --sp-xxs: 4px;
+    --sp-xs: 8px;
+    --sp-sm: 12px;
+    --sp-md: 16px;
+    --sp-lg: 24px;
+    --sp-xl: 32px;
+    --sp-xxl: 48px;
+    --sp-section: 96px;
+
+    --font-display: "Haas Groot Disp", "Inter Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --font-text: "Haas Grotesk", "Haas", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-text);
+    color: var(--body);
+    background: var(--canvas);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--sp-xxl);
+  }
+
+  /* ---------- Top nav ---------- */
+  .top-nav {
+    height: 64px;
+    background: var(--canvas);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--hairline);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .top-nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .nav-menu {
+    display: flex;
+    gap: var(--sp-lg);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--body);
+  }
+  .nav-actions { display: flex; align-items: center; gap: var(--sp-md); }
+  .nav-login { font-size: 14px; font-weight: 400; color: var(--body); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-text);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: var(--radius-lg);
+    padding: 16px 24px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:active { background: var(--primary-active); }
+  .btn-secondary {
+    background: var(--canvas);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+  }
+  .btn-secondary-on-dark {
+    background: var(--canvas);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+  }
+  .btn-row { display: flex; gap: var(--sp-md); align-items: center; }
+
+  /* ---------- Section rhythm ---------- */
+  section { padding: var(--sp-section) 0; }
+
+  /* ---------- Hero band ---------- */
+  .hero-band { background: var(--canvas); text-align: left; }
+  .hero-band .container { max-width: 860px; }
+  .hero-band h1 {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin: 0 0 var(--sp-md) 0;
+  }
+  .hero-band p.lead {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--body);
+    margin: 0 0 var(--sp-xl) 0;
+    max-width: 560px;
+  }
+
+  /* ---------- Logo strip ---------- */
+  .logo-strip { padding: var(--sp-xl) 0; background: var(--canvas); }
+  .logo-strip .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-lg);
+  }
+  .logo-strip .logo-item {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Signature coral card ---------- */
+  .signature-coral-card {
+    background: var(--signature-coral);
+    color: var(--on-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-xxl);
+  }
+  .signature-coral-card h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 var(--sp-md) 0;
+    max-width: 620px;
+  }
+  .signature-coral-card p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.88);
+    margin: 0 0 var(--sp-xl) 0;
+    max-width: 480px;
+  }
+
+  /* ---------- White body / feature tabbed ---------- */
+  .section-heading {
+    font-family: var(--font-text);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.12px;
+    color: var(--ink);
+    margin: 0 0 var(--sp-xl) 0;
+  }
+  .feature-card-tabbed {
+    background: var(--surface-soft);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-xl);
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--sp-xl);
+  }
+  .feature-tabs { display: flex; flex-direction: column; gap: var(--sp-md); }
+  .feature-tab {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--muted);
+    padding-bottom: var(--sp-sm);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .feature-tab.active { color: var(--ink); font-weight: 500; }
+  .feature-content h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0 0 var(--sp-sm) 0;
+  }
+  .feature-content p {
+    font-size: 14px;
+    line-height: 1.25;
+    color: var(--body);
+    margin: 0;
+  }
+
+  /* ---------- Demo grid ---------- */
+  .demo-grid {
+    margin-top: var(--sp-xxl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+  }
+  .demo-grid-card {
+    border-radius: var(--radius-md);
+    padding: var(--sp-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .demo-grid-card .demo-swatch {
+    border-radius: var(--radius-sm);
+    background: rgba(0,0,0,0.08);
+    margin-bottom: var(--sp-md);
+  }
+  .demo-grid-card .label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .demo-grid-card.peach { background: var(--signature-peach); }
+  .demo-grid-card.mint { background: var(--signature-mint); }
+  .demo-grid-card.mustard { background: var(--signature-mustard); }
+  .demo-grid-card.peach .demo-swatch { height: 140px; }
+  .demo-grid-card.mint .demo-swatch { height: 100px; }
+  .demo-grid-card.mustard .demo-swatch { height: 170px; }
+
+  /* ---------- Cream callout ---------- */
+  .cream-callout-card {
+    background: var(--signature-cream);
+    color: var(--ink);
+    border-radius: var(--radius-md);
+    padding: var(--sp-lg);
+  }
+  .cream-callout-card .callout-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .cream-callout-card h2 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.12px;
+    margin: 0 0 var(--sp-md) 0;
+  }
+  .cream-callout-card p {
+    font-size: 14px;
+    line-height: 1.25;
+    color: var(--body);
+    margin: 0;
+  }
+
+  /* ---------- Dark CTA card ---------- */
+  .hero-card-dark {
+    background: var(--surface-dark);
+    color: var(--on-dark);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-xxl);
+    text-align: center;
+  }
+  .hero-card-dark h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 auto var(--sp-xl) auto;
+    max-width: 640px;
+  }
+  .hero-card-dark .btn-row { justify-content: center; }
+
+  /* ---------- Light CTA band ---------- */
+  .cta-band-light {
+    background: var(--surface-strong);
+    color: var(--ink);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-xxl);
+    text-align: center;
+  }
+  .cta-band-light h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 var(--sp-xl) 0;
+  }
+  .cta-band-light .btn-row { justify-content: center; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--canvas);
+    padding: var(--sp-section) 0 var(--sp-xl) 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--sp-md);
+    padding-bottom: var(--sp-xl);
+  }
+  .footer-columns h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 var(--sp-md) 0;
+  }
+  .footer-columns ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-sm); }
+  .footer-columns a { font-size: 14px; color: var(--muted); }
+  .footer-legal {
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--sp-md);
+    font-size: 13.12px;
+    font-weight: 600;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .demo-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .container { padding: 0 var(--sp-lg); }
+    .nav-menu { display: none; }
+    .hero-band h1 { font-size: 32px; }
+    .feature-card-tabbed { grid-template-columns: 1fr; }
+    .demo-grid { grid-template-columns: 1fr; }
+    .footer-columns { grid-template-columns: repeat(2, 1fr); }
+    .footer-legal { flex-direction: column; gap: var(--sp-sm); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- top-nav -->
+  <nav class="top-nav">
+    <div class="container">
+      <div class="wordmark">Flow</div>
+      <div class="nav-menu">
+        <a href="#">플랫폼</a>
+        <a href="#">솔루션</a>
+        <a href="#">리소스</a>
+        <a href="#">엔터프라이즈</a>
+        <a href="#">요금제</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="#" style="padding: 10px 16px;">데모 예약</a>
+        <a class="btn btn-primary" href="#" style="padding: 10px 16px;">무료로 시작하기</a>
+        <a class="nav-login" href="#">로그인</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- hero-band -->
+  <section class="hero-band">
+    <div class="container">
+      <h1>흩어진 업무를, 하나의 흐름으로.</h1>
+      <p class="lead">Flow는 팀의 계획, 실행, 협업을 한 화면에서 이어 붙이는 워크플로우 플랫폼입니다. 스프레드시트의 익숙함과 데이터베이스의 힘을 그대로.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#">무료로 시작하기</a>
+        <a class="btn btn-secondary" href="#">데모 예약</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- logo-strip -->
+  <section class="logo-strip" style="padding-top: 0;">
+    <div class="container">
+      <span class="logo-item">Nova Media</span>
+      <span class="logo-item">Harbor Inc.</span>
+      <span class="logo-item">Lumen Studio</span>
+      <span class="logo-item">Cobalt Labs</span>
+      <span class="logo-item">Ridge Partners</span>
+      <span class="logo-item">Vertex Co.</span>
+    </div>
+  </section>
+
+  <!-- signature-coral-card -->
+  <section>
+    <div class="container">
+      <div class="signature-coral-card">
+        <h2>프로토타입 속도로, 프로덕션 앱을.</h2>
+        <p>아이디어를 몇 시간 만에 실제로 동작하는 내부 도구로 바꾸세요. 코드 없이 시작해서, 필요할 때 코드로 확장합니다.</p>
+        <a class="btn btn-secondary-on-dark" href="#">자세히 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- white body: feature-card-tabbed -->
+  <section>
+    <div class="container">
+      <h2 class="section-heading">팀이 실제로 쓰는 방식에 맞춘 기능</h2>
+      <div class="feature-card-tabbed">
+        <div class="feature-tabs">
+          <div class="feature-tab active">프로젝트 관리</div>
+          <div class="feature-tab">마케팅 캘린더</div>
+          <div class="feature-tab">제품 로드맵</div>
+          <div class="feature-tab">고객 관계 관리</div>
+        </div>
+        <div class="feature-content">
+          <h3>프로젝트 관리</h3>
+          <p>작업, 담당자, 마감일을 하나의 뷰에서 관리하고, 보드·캘린더·타임라인 뷰를 자유롭게 전환하세요. 필터와 그룹화로 팀에 필요한 정보만 남길 수 있습니다.</p>
+        </div>
+      </div>
+
+      <!-- demo-grid -->
+      <div class="demo-grid">
+        <div class="demo-grid-card peach">
+          <div class="demo-swatch"></div>
+          <div class="label">칸반 보드</div>
+        </div>
+        <div class="demo-grid-card mint">
+          <div class="demo-swatch"></div>
+          <div class="label">자동화 규칙</div>
+        </div>
+        <div class="demo-grid-card mustard">
+          <div class="demo-swatch"></div>
+          <div class="label">리포트 대시보드</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- cream-callout-card -->
+  <section>
+    <div class="container">
+      <div class="cream-callout-card">
+        <div class="callout-inner">
+          <h2>조직 구성원 모두를 10배로 만드는 길</h2>
+          <p>반복 업무를 자동화하고, 흩어진 데이터를 한 곳으로 모아 팀 전체의 생산성을 끌어올립니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- hero-card-dark -->
+  <section>
+    <div class="container">
+      <div class="hero-card-dark">
+        <h2>지금 팀의 워크플로우를 다시 설계하세요.</h2>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#" style="background: var(--canvas); color: var(--ink);">무료로 시작하기</a>
+          <a class="btn btn-secondary-on-dark" href="#">영업팀 문의</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- cta-band-light -->
+  <section>
+    <div class="container">
+      <div class="cta-band-light">
+        <h2>Flow와 함께 만들어보세요</h2>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#">무료로 시작하기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-columns">
+        <div>
+          <h4>플랫폼</h4>
+          <ul>
+            <li><a href="#">앱 빌더</a></li>
+            <li><a href="#">자동화</a></li>
+            <li><a href="#">인터페이스</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>솔루션</h4>
+          <ul>
+            <li><a href="#">마케팅</a></li>
+            <li><a href="#">제품 운영</a></li>
+            <li><a href="#">인사</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>리소스</h4>
+          <ul>
+            <li><a href="#">가이드</a></li>
+            <li><a href="#">템플릿</a></li>
+            <li><a href="#">커뮤니티</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>고객지원</h4>
+          <ul>
+            <li><a href="#">도움말 센터</a></li>
+            <li><a href="#">문의하기</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>회사</h4>
+          <ul>
+            <li><a href="#">회사 소개</a></li>
+            <li><a href="#">채용</a></li>
+            <li><a href="#">보안</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-legal">
+        <span>© 2026 Flow, Inc. All rights reserved.</span>
+        <span>개인정보처리방침 · 이용약관</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
